@@ -50,7 +50,8 @@ verbose : boolean
                         % (interaction, compilefile), shell=True,\
                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out, err = proc.communicate()    
-    
+    if verbose:
+        print "Done compiling"
     # Checks for error messages in format ERROR:LINENUMBER:ERRORMESSAGE
     pattern = re.compile(".*:\d+:.*\n", re.MULTILINE)
     match = re.search(pattern, out)

@@ -3,6 +3,7 @@ import re # for handling regex commands
 import subprocess
 import argparse
 import os
+import textwrap
 
 packages = "%s" % ("\\usepackage{fancyvrb}\n"\
     +"\\usepackage{framed}\n"\
@@ -134,26 +135,31 @@ script : string
     if len(in_line.split()) > 1:
         args = in_line.split()[1:]
         script_filename = args[0]
-        regex = args[len(args)-1][1:-1]
+        regex = in_line.split("\"")[:2]
         if verbose:
             print "Opening file '%s' to import script matching pattern '%s'" % (script_filename, regex)
         # Open script file
         script_file = open(script_filename, 'r')
         script = script_file.read()
         script_file.close()
+        if verbose:
+            print "File-len: %d" % len(script)
 
         # Filter with regex
-        pattern = re.compile(r"%s" % regex, re.MULTILINE)
-        match = re.search(pattern, script)
-
+        pattern = re.compile(r"\"%s\"" % regex)
+        matches = re.findall(pattern, script)
+        matched_content = ""
         # Group from regex found
-        if match:
+        if len(matches) > 0:
             # Add verbatim-environment
             content += "%s" % begin_shaded_verbatim(fancy)
             # Add matched content groups
-            for group in match.groups():
-                content += "%s" % group
+            matched_content = ""
+            for match in matches:
+                for group in match:
+                    matched_content += "%s" % group
             # Add verbatim-environment end
+            content += '\n'.join(map(textwrap.TextWrapper(width=70, subsequent_indent=' '*14).fill, matched_content.split('\n')))
             content += "\n" + end_shaded_verbatim(fancy)
             if verbose:
                 print "Above pattern found in '%s', and imported" % script_filename
@@ -447,7 +453,7 @@ Function ran if standalone.
         out_file = open(out_filename, 'w')
         in_line = in_file.readline()
         # \documentclass is needed before anything else
-        while in_line[:15] != "\documentclass{":
+        while in_line[:14] != "\documentclass":
             out_file.write(in_line)
             in_line = in_file.readline()
         out_file.write(in_line)
