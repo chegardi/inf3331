@@ -1,6 +1,5 @@
-# inf3331
-Her legger jeg ut utdrag fra faget INF3331 fra Høsten 2014 på UiO.
+# LaTeX preprocessor and compiler
+This is the result from a mandatory assignment in INF3331 at University of Oslo Fall2014.
 
-Oblig2 var en obligatorisk oppgave som gikk ut på å lage en preprosessor (og enkel kompilator) til LaTeX.
-Grunnen er fordi det er mye ekstra funksjonalitet som vi skulle implementere for å lettere vise fram deler av koden når det er snakk om retting av kode-oppgaver ved universitetet. Samtidig er kompilatoren for å redusere den overflødige og "unødvendige" informasjonen pdflatex og andre LaTeX kompilatorer hiver ut i Terminal til det mest nødvendige.
-Programmet er veldig praktisk, og brukte det blandt annet i forbindelse med innlevering av hjemmeeksamen i INF1060.
+The reason for creating the preprocessor was to increase functionality of LaTeX to comprehend reports about works in programming. As every line the preprocessor handles starts with '%', a regular LaTeX compiler will still manage to handle docuemts written with the preprocess executions, as they are treated as comments in all other cases other than when ran through prepro.py.
+The compiler is actually just a method of creating the .pdf document from any LaTeX source code (that preferably have been preprocessed, but it is not necessary). The main feature of the compiler is to reduce the amount of output created by pdflatex to the only information desirable - successful or not.

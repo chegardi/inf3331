@@ -135,7 +135,7 @@ script : string
     if len(in_line.split()) > 1:
         args = in_line.split()[1:]
         script_filename = args[0]
-        regex = in_line.split("\"")[:2]
+        regex = in_line.split("\"")[-2]
         if verbose:
             print "Opening file '%s' to import script matching pattern '%s'" % (script_filename, regex)
         # Open script file
@@ -146,9 +146,11 @@ script : string
             print "File-len: %d" % len(script)
 
         # Filter with regex
-        pattern = re.compile(r"\"%s\"" % regex)
+        pattern = re.compile(r"%s" % regex)
         matches = re.findall(pattern, script)
         matched_content = ""
+        if verbose:
+            print matches
         # Group from regex found
         if len(matches) > 0:
             # Add verbatim-environment
