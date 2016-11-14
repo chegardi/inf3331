@@ -234,9 +234,10 @@ executed script : string
     try:
         proc = subprocess.Popen((args), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         out, err = proc.communicate()
-        out_write = out.split('\n')
+        out_write = out.split('\n')       
         for line in out_write[:-1]:
-            content += "%s \n" % line
+            content += '\n'.join(map(textwrap.TextWrapper(width=70).fill, line.split('\n')))
+#            content += "{0}\n".format(line)
         
     except OSError:
         print "! ! ! - - - ! ! !\n    File '%s' not found, check if path is correct" % args[0]
